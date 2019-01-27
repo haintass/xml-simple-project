@@ -1,0 +1,81 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Books shop</h1>
+
+    <table class="table table-responsive table-bordered">
+        <thead style="background-color: Highlight">
+            <tr>
+                <th><h3 style="margin-right: 30px;">Book Name</h3></th>
+                <th><h3 style="margin-right: 30px;">Author</h3></th>
+                <th><h3 style="margin-right: 30px;">Price</h3></th>
+                <th><h3 style="margin-right: 30px;">Id</h3></th>
+                <th>
+                    <p><a href="/Home/DeleteAll">Delete ALL</a></p>
+                </th>
+            </tr>
+        </thead>
+        @foreach (var b in ViewBag.Books) {
+            <tr>
+                <td><p>@b.Name</p></td>
+                <td><p>@b.Author</p></td>
+                <td><p>@b.Price</p></td>
+                <td><p>@b.Id</p></td>
+                <td><p><a href="/Home/Delete/@b.Id">Delete</a></p></td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Add new book</h2>
+        <form method="post" action="/Home/AddBook">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Name" class="form-control-plaintext" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Author</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Author" class="form-control-plaintext" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Price" class="form-control-plaintext" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Id</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Id" class="form-control-plaintext" required>
+                </div>
+            </div>
+
+            <input type="submit" value="Add" />
+        </form>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Add several books</h2>
+
+        @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+            <input type="file" name="file" multiple/><br>
+            <input type="submit" value="Загрузить" />
+        }
+    </div>
+    <div class="col-md-4">
+        <h2>Download template</h2>
+        <p>Download a template for adding multiple books.</p>
+        <p><a class="btn btn-default" href="/Home/GetTemplate">Get template &#9660;</a></p>
+    </div>
+</div>
