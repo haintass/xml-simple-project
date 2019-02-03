@@ -1,21 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<books xmlns="localhost" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="/XML/ BooksListSchema.xsd">
-  <book>
-    <name>Book 2</name>
-    <author>Author 2</author>
-    <price>300</price>
-    <id>1002</id>
-  </book>
+<books xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="/XML/ BooksListSchema.xsd">
   <book>
     <name>Book 3</name>
     <author>Author 3</author>
     <price>3200</price>
-    <id>1003</id>
-  </book>
-  <book>
-    <name>Book 4</name>
-    <author>Author 4</author>
-    <price>3000</price>
-    <id>1004</id>
+    <id>5547</id>
   </book>
 </books>

@@ -2,16 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Xml.Serialization;
 
 namespace XmlWebApp.Models {
-	public class Book {
-		// ID книги
-		public int Id { get; set; }
-		// название книги
+	[Serializable, XmlRoot("books")]
+	public class Book {		
+		[XmlElement(ElementName ="name")]
 		public string Name { get; set; }
-		// автор книги
+
+		[XmlElement("athor")]
 		public string Author { get; set; }
-		// цена
+
+		[XmlElement("price")]
 		public int Price { get; set; }
+
+		[XmlElement("id")]
+		public int Id { get; set; }
+	}
+
+	[Serializable]
+	[XmlRoot("books")]
+	public class Books{
+		[XmlArray("books")]
+		[XmlArrayItem("book", typeof(Book))]
+		public Book[] Book { get; set; }
 	}
 }
