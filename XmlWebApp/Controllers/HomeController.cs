@@ -11,10 +11,6 @@ using XmlWebApp.Models;
 
 namespace XmlWebApp.Controllers {
 	public class HomeController : Controller {
-		public ActionResult Index() {
-			return GetBooks();
-		}
-
 		public ActionResult GetBooks() {
 			var data = new List<Book>();
 
