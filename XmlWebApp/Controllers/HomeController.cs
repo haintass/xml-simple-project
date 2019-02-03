@@ -159,17 +159,6 @@ namespace XmlWebApp.Controllers {
 				booksList.Add(book);
 			}
 
-
-			//DataSet dataSet = new DataSet();
-			//dataSet.ReadXml(xmlData);
-			//booksList = (from rows in dataSet.Tables[0].AsEnumerable()
-			//			 select new Book {
-			//				 Id = Convert.ToInt32(rows[0].ToString()),
-			//				 Name = rows[1].ToString(),
-			//				 Author = rows[2].ToString(),
-			//				 Price = Convert.ToInt32(rows[3].ToString())
-			//			 }).ToList();
-
 			return booksList;
 		}
 	}
