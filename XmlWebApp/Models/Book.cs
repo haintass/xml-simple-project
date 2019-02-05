@@ -5,12 +5,12 @@ using System.Web;
 using System.Xml.Serialization;
 
 namespace XmlWebApp.Models {
-	[Serializable, XmlRoot("books")]
+	[Serializable]
 	public class Book {		
 		[XmlElement(ElementName ="name")]
 		public string Name { get; set; }
 
-		[XmlElement("athor")]
+		[XmlElement("author")]
 		public string Author { get; set; }
 
 		[XmlElement("price")]
@@ -23,8 +23,7 @@ namespace XmlWebApp.Models {
 	[Serializable]
 	[XmlRoot("books")]
 	public class Books{
-		[XmlArray("books")]
-		[XmlArrayItem("book", typeof(Book))]
+		[XmlArray("bookCollection"), XmlArrayItem("book", typeof(Book))]
 		public Book[] Book { get; set; }
 	}
 }

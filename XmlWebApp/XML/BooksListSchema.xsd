@@ -3,37 +3,47 @@
   <xs:element name="books">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="book" minOccurs="0" maxOccurs="unbounded">
+        
+        <xs:element name="bookCollection">
           <xs:complexType>
             <xs:sequence>
-              
-              <xs:element name="name">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:minLength value="1" />
-                  </xs:restriction>
-                </xs:simpleType>
+
+              <xs:element name="book" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+
+                    <xs:element name="name">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1" />
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+
+                    <xs:element name="author">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1" />
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+
+                    <xs:element name="price" type="xs:positiveInteger" />
+
+                    <xs:element name="id" type="xs:int" />
+                  </xs:sequence>
+                </xs:complexType>
               </xs:element>
-              
-              <xs:element name="author">
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:minLength value="1" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              
-              <xs:element name="price" type="xs:positiveInteger" />
-              
-              <xs:element name="id" type="xs:int" />
+
             </xs:sequence>
           </xs:complexType>
-        </xs:element>        
+          <xs:unique name='unique_field_id'>
+            <xs:selector xpath='book' />
+            <xs:field xpath='id' />
+          </xs:unique>
+        </xs:element>
+        
       </xs:sequence>
     </xs:complexType>
-    <xs:unique name='unique_field_id'>
-      <xs:selector xpath='book' />
-      <xs:field xpath='id' />
-    </xs:unique>
   </xs:element>
 </xs:schema>

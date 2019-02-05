@@ -11,9 +11,6 @@ using System.Xml.Serialization;
 using System.IO;
 
 /*
-* Learn how to deserialize XML to Object. Object to .XML
-* https://stackoverflow.com/questions/364253/how-to-des..
-*
 * Learn LINQ to XML
 *
 * !!! Important
@@ -22,6 +19,11 @@ using System.IO;
 
 namespace XmlWebApp.Controllers {
 	public class HomeController : Controller {
+		enum UploadType {
+			xmlNodes,
+			xmlSerializer
+		}
+
 		public ActionResult GetBooks() {
 			var data = new List<Book>();
 
@@ -51,21 +53,20 @@ namespace XmlWebApp.Controllers {
 		}
 
 		private void UploadViaXmlSerializer(HttpRequestBase request) {
-			//Book book = new Book { Author = "Author 1", Name = "Book 1", Id = 1, Price = 500 };
-
-			//XmlSerializer formatter = new XmlSerializer(typeof(Book));
-			//string path = Server.MapPath("~/Files/test.xml");
-
-			//using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate)) {
-			//	formatter.Serialize(fs, book);
-			//}
-
 			for (int i = 0; i < request.Files.Count; i++) {
 				HttpPostedFileBase fileData = request.Files[i];
+				Books books = null;
 
-				XmlSerializer serializer = new XmlSerializer(typeof(Book));
+				//Serializable example
+				XmlSerializer serializer = new XmlSerializer(typeof(Books));
 				using (StreamReader sr = new StreamReader(fileData.InputStream)) {
-					Book book = (Book)(serializer.Deserialize(sr));
+					books = (Books)(serializer.Deserialize(sr));
+				}
+
+				//Deserializable example
+				string path = Server.MapPath("~/BooksList.xml");
+				using (FileStream fs = new FileStream(path, FileMode.Append)) {
+					serializer.Serialize(fs, books);
 				}
 			}
 		}
@@ -84,8 +85,6 @@ namespace XmlWebApp.Controllers {
 		}
 
 		private void UploadXmlFile(HttpPostedFileBase fileData) {
-			ValidaionFile(fileData);
-
 			var xDoc = new XmlDocument();
 			fileData.InputStream.Position = 0;
 
@@ -94,29 +93,12 @@ namespace XmlWebApp.Controllers {
 			XmlElement xRoot = xDoc.DocumentElement;
 			
 			foreach (XmlNode xnode in xRoot) {
-				Book book = GetDataFromXml(xnode); // iterate xml nodes
+				Book book = GetDataFromXml(xnode);
 				AddNewBook(book);
 			}
 		}
 
-		private void ValidaionFile (HttpPostedFileBase fileData) {
-			string SchemaPath = Server.MapPath("~/XML/BooksListSchema.xsd");
-
-			var xDoc = new XmlDocument();
-			xDoc.Load(fileData.InputStream);
-
-			xDoc.Schemas.Add("", SchemaPath);
-			xDoc.Validate(ValidationEventHandler);
-		}
-
-		private static void ValidationEventHandler(object sender, ValidationEventArgs e) {
-			XmlSeverityType type = XmlSeverityType.Warning;
-			if (Enum.TryParse<XmlSeverityType>("Error", out type)) {
-				if (e.Severity == XmlSeverityType.Error) throw new Exception(e.Message);
-			}
-		}
-
-		private void UploadXlsxFile (HttpPostedFileBase fileData) {
+		private void UploadXlsxFile(HttpPostedFileBase fileData) {
 			if ((fileData != null) && (fileData.ContentLength > 0)) {
 				using (var package = new ExcelPackage(fileData.InputStream)) {
 					var currentSheet = package.Workbook.Worksheets;
@@ -135,6 +117,20 @@ namespace XmlWebApp.Controllers {
 						AddNewBook(book);
 					}
 				}
+			}
+		}
+
+		private void ValidaionFile (XmlDocument xDoc) {
+			string SchemaPath = Server.MapPath("~/XML/BooksListSchema.xsd");
+
+			xDoc.Schemas.Add("", SchemaPath);
+			xDoc.Validate(ValidationEventHandler);
+		}
+
+		private static void ValidationEventHandler(object sender, ValidationEventArgs e) {
+			XmlSeverityType type = XmlSeverityType.Warning;
+			if (Enum.TryParse<XmlSeverityType>("Error", out type)) {
+				if (e.Severity == XmlSeverityType.Error) throw new Exception(e.Message);
 			}
 		}
 
@@ -163,7 +159,7 @@ namespace XmlWebApp.Controllers {
 			doc.Load(xmlData);
 
 			XmlElement xRoot = doc.DocumentElement;
-			foreach (XmlNode node in xRoot) {
+			foreach (XmlNode node in xRoot.FirstChild) {
 				Book book = GetDataFromXml(node);
 				booksList.Add(book);
 			}
@@ -204,8 +200,8 @@ namespace XmlWebApp.Controllers {
 			XmlDocument doc = new XmlDocument();
 			doc.Load(xmlData);
 
-			XmlElement xmlRoot = doc.DocumentElement;
-
+			XmlNode xmlRoot = doc.DocumentElement.FirstChild;
+			
 			XmlElement bookElem = doc.CreateElement("book");
 			XmlElement nameElem = doc.CreateElement("name");
 			XmlElement authorElem = doc.CreateElement("author");
@@ -228,6 +224,9 @@ namespace XmlWebApp.Controllers {
 			bookElem.AppendChild(idElem);
 
 			xmlRoot.AppendChild(bookElem);
+
+			ValidaionFile(doc);
+
 			doc.Save(xmlData);
 		}
 
@@ -237,7 +236,7 @@ namespace XmlWebApp.Controllers {
 			XmlDocument doc = new XmlDocument();
 			doc.Load(xmlData);
 			
-			XmlNode root = doc.DocumentElement;
+			XmlNode root = doc.DocumentElement.FirstChild;
 			XmlNode node = root.SelectSingleNode(
 				String.Format("book[id='{0}']",
 				id));
@@ -253,7 +252,7 @@ namespace XmlWebApp.Controllers {
 			XmlDocument doc = new XmlDocument();
 			doc.Load(xmlData);
 
-			XmlElement xmlRoot = doc.DocumentElement;
+			XmlNode xmlRoot = doc.DocumentElement.FirstChild;
 			xmlRoot.RemoveAll();
 			doc.Save(xmlData);
 

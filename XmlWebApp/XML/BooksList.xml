@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <books xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="/XML/ BooksListSchema.xsd">
-  <book>
-    <name>Book 3</name>
-    <author>Author 3</author>
-    <price>3200</price>
-    <id>5547</id>
-  </book>
+  <bookCollection>
+  </bookCollection>
 </books>
