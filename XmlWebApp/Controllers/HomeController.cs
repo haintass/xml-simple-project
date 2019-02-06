@@ -6,13 +6,12 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Linq;
 using XmlWebApp.Models;
 using System.Xml.Serialization;
 using System.IO;
 
 /*
-* Learn LINQ to XML
-*
 * !!! Important
 * Iterate XML nodes without reading whole file. 
 */
@@ -21,7 +20,8 @@ namespace XmlWebApp.Controllers {
 	public class HomeController : Controller {
 		enum UploadType {
 			xmlNodes,
-			xmlSerializer
+			xmlSerializer,
+			LinqToXml
 		}
 
 		public ActionResult GetBooks() {
@@ -55,18 +55,16 @@ namespace XmlWebApp.Controllers {
 		private void UploadViaXmlSerializer(HttpRequestBase request) {
 			for (int i = 0; i < request.Files.Count; i++) {
 				HttpPostedFileBase fileData = request.Files[i];
-				Books books = null;
+				Books bookList = null;
 
 				//Serializable example
 				XmlSerializer serializer = new XmlSerializer(typeof(Books));
 				using (StreamReader sr = new StreamReader(fileData.InputStream)) {
-					books = (Books)(serializer.Deserialize(sr));
+					bookList = (Books)(serializer.Deserialize(sr));
 				}
 
-				//Deserializable example
-				string path = Server.MapPath("~/BooksList.xml");
-				using (FileStream fs = new FileStream(path, FileMode.Append)) {
-					serializer.Serialize(fs, books);
+				foreach (Book book in bookList.Book) {
+					AddNewBookViaXmlNodes(book);
 				}
 			}
 		}
@@ -94,7 +92,7 @@ namespace XmlWebApp.Controllers {
 			
 			foreach (XmlNode xnode in xRoot) {
 				Book book = GetDataFromXml(xnode);
-				AddNewBook(book);
+				AddNewBookViaXmlNodes(book);
 			}
 		}
 
@@ -114,14 +112,14 @@ namespace XmlWebApp.Controllers {
 						book.Price = Convert.ToInt32(workSheet.Cells[rowIterator, numberOfColumn++].Value.ToString());
 						book.Id = Convert.ToInt32(workSheet.Cells[rowIterator, numberOfColumn++].Value.ToString());
 
-						AddNewBook(book);
+						AddNewBookViaXmlNodes(book);
 					}
 				}
 			}
 		}
 
 		private void ValidaionFile (XmlDocument xDoc) {
-			string SchemaPath = Server.MapPath("~/XML/BooksListSchema.xsd");
+			string SchemaPath = Server.MapPath(Consts.bookListSchemaPath);
 
 			xDoc.Schemas.Add("", SchemaPath);
 			xDoc.Validate(ValidationEventHandler);
@@ -135,17 +133,54 @@ namespace XmlWebApp.Controllers {
 		}
 
 		public FileResult GetXlsxTemplate() {
-			string file_path = Server.MapPath("~/Files/Template.xlsx");
+			string file_path = Server.MapPath(Consts.xlsxTemplatePath);
 			string fileType = "application/xlsx";
 
 			return File(file_path, fileType, "Template.xlsx");
 		}
 
 		public FileResult GetXmlTemplate() {
-			string file_path = Server.MapPath("~/Files/XmlTemplate.xml");
+			string file_path = Server.MapPath(Consts.xmlTemplatePath);
 			string fileType = "application/xml";
 
 			return File(file_path, fileType, "XmlTemplate.xml");
+		}
+
+		[HttpPost]
+		public ActionResult AddBook(Book book) {
+			var uploadType = (UploadType)Convert.ToInt32(Request.Params[0]);
+
+			switch (uploadType) {
+				case UploadType.xmlNodes:
+					AddNewBookViaXmlNodes(book);
+					break;
+				case UploadType.LinqToXml:
+					AddBookViaLinqToXml(book);
+					break;
+			}
+
+			return GetBooks();
+		}
+
+		public void AddBookViaLinqToXml(Book book) {
+			string filePath = Server.MapPath(Consts.bookListXmlPath);
+			string schemaPath = Server.MapPath(Consts.bookListSchemaPath);
+
+			XDocument doc = XDocument.Load(filePath);
+
+			doc.Element("books").Element("bookCollection").Add(
+				new XElement("book",
+				new XElement("name", book.Name),
+				new XElement("author", book.Author),
+				new XElement("price", book.Price),
+				new XElement("id", book.Id))
+				);
+
+			XmlSchemaSet schemaSet = new XmlSchemaSet();
+			schemaSet.Add("", schemaPath);
+
+			doc.Validate(schemaSet, ValidationEventHandler);
+			doc.Save(filePath);
 		}
 
 		/* STRART OF THE EXAMPLE OF WORKING WITH XML NODES */
@@ -153,7 +188,7 @@ namespace XmlWebApp.Controllers {
 		public List<Book> ReturnData() {
 			var booksList = new List<Book>();
 
-			string xmlData = Server.MapPath("~/XML/BooksList.xml");
+			string xmlData = Server.MapPath(Consts.bookListXmlPath);
 
 			XmlDocument doc = new XmlDocument();
 			doc.Load(xmlData);
@@ -189,14 +224,8 @@ namespace XmlWebApp.Controllers {
 			return book;
 		}
 
-		[HttpPost]
-		public ActionResult AddBook(Book book) {
-			AddNewBook(book);
-			return GetBooks();
-		}
-
-		public void AddNewBook(Book book) {
-			string xmlData = Server.MapPath("~/XML/BooksList.xml");
+		public void AddNewBookViaXmlNodes(Book book) {
+			string xmlData = Server.MapPath(Consts.bookListXmlPath);
 			XmlDocument doc = new XmlDocument();
 			doc.Load(xmlData);
 
@@ -232,7 +261,7 @@ namespace XmlWebApp.Controllers {
 
 		[HttpGet]
 		public ActionResult Delete(int id) {
-			string xmlData = Server.MapPath("~/XML/BooksList.xml");
+			string xmlData = Server.MapPath(Consts.bookListXmlPath);
 			XmlDocument doc = new XmlDocument();
 			doc.Load(xmlData);
 			
@@ -248,7 +277,7 @@ namespace XmlWebApp.Controllers {
 		}
 
 		public ActionResult DeleteAll() {
-			string xmlData = Server.MapPath("~/XML/BooksList.xml");
+			string xmlData = Server.MapPath(Consts.bookListXmlPath);
 			XmlDocument doc = new XmlDocument();
 			doc.Load(xmlData);
 

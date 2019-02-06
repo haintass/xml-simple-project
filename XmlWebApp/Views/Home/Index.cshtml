@@ -32,37 +32,44 @@
 <div class="row">
     <div class="col-md-4">
         <h2>Add new book</h2>
-            <form method="post" action="/Home/AddBook">
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Name</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="Name" class="form-control-plaintext" required>
-                    </div>
-                </div>
+        <form method="post" action="/Home/AddBook">
 
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Author</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="Author" class="form-control-plaintext" required>
-                    </div>
-                </div>
+            <select id="countires" name="uploadType">
+                <option value="0" selected>XmlNodes</option>
+                <option value="2">LINQ to XML</option>
+            </select>
+            <label>choose upload type</label>
 
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Price</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="Price" class="form-control-plaintext" required>
-                    </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Name" class="form-control-plaintext" required>
                 </div>
+            </div>
 
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Id</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="Id" class="form-control-plaintext" required>
-                    </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Author</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Author" class="form-control-plaintext" required>
                 </div>
+            </div>
 
-                <input type="submit" value="Add" />
-            </form>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Price" class="form-control-plaintext" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Id</label>
+                <div class="col-sm-10">
+                    <input type="text" name="Id" class="form-control-plaintext" required>
+                </div>
+            </div>
+
+            <input type="submit" value="Add" />
+        </form>
     </div>
 
     <div class="col-md-4">
@@ -71,7 +78,7 @@
         @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" })) {
             <select id="countires" name="uploadType">
                 <option value="0" selected>XmlNodes</option>
-                <option value="1">XmlSerializer </option>
+                <option value="1">XmlSerializer</option>
             </select>
             <label>choose upload type</label>
 
