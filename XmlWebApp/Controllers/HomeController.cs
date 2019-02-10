@@ -11,11 +11,6 @@ using XmlWebApp.Models;
 using System.Xml.Serialization;
 using System.IO;
 
-/*
-* !!! Important
-* Iterate XML nodes without reading whole file. 
-*/
-
 namespace XmlWebApp.Controllers {
 	public class HomeController : Controller {
 		enum UploadType {

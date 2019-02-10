@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "LargeXml";
+}
+
+<div class="col-md-4">
+    <h2>Create large file</h2>
+
+    <form method="post" action="/LargeXml/GenerateFile">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Nodes Count</label>
+            <div class="col-sm-10">
+                <input type="text" name="nodesCount" class="form-control-plaintext" required>
+            </div>
+        </div>
+
+        <input type="submit" value="Generate" />
+    </form>
+</div>
+
+
+<div class="jumbotron">
+    <table class="table table-responsive table-bordered">
+        <thead style="background-color: Highlight">
+            <tr>
+                <th><h3 style="margin-right: 30px;">Book Name</h3></th>
+                <th><h3 style="margin-right: 30px;">Author</h3></th>
+                <th><h3 style="margin-right: 30px;">Price</h3></th>
+                <th><h3 style="margin-right: 30px;">Id</h3></th>
+                <th>
+                    <p><a href="/LargeXml/DeleteAll">Delete ALL</a></p>
+                </th>
+            </tr>
+        </thead>
+        @foreach (var b in ViewBag.Books) {
+            <tr>
+                <td><p>@b.Name</p></td>
+                <td><p>@b.Author</p></td>
+                <td><p>@b.Price</p></td>
+                <td><p>@b.Id</p></td>
+                <td><p><a href="/LargeXml/Delete/@b.Id">Delete</a></p></td>
+            </tr>
+        }
+    </table>
+</div>

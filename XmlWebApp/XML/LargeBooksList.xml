@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<books>
+  <bookCollection>
+    <book>
+      <name>YSX79SKH2L</name>
+      <author>NXX4FB61LY</author>
+      <price>2309</price>
+      <id>1</id>
+    </book>
+    <book>
+      <name>F7LK0I76BG</name>
+      <author>A4XBZOYZ3R</author>
+      <price>7457</price>
+      <id>2</id>
+    </book>
+    <book>
+      <name>HACI899DJP</name>
+      <author>8AATVLWIKM</author>
+      <price>3101</price>
+      <id>3</id>
+    </book>
+    <book>
+      <name>0EM2A3PWHC</name>
+      <author>SHR76IC1I8</author>
+      <price>7954</price>
+      <id>4</id>
+    </book>
+    <book>
+      <name>11C3WSEDBQ</name>
+      <author>SEPQ60P8GT</author>
+      <price>4843</price>
+      <id>5</id>
+    </book>
+  </bookCollection>
+</books>
