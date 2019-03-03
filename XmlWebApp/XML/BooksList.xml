@@ -2,10 +2,10 @@
 <books xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="/XML/ BooksListSchema.xsd">
   <bookCollection>
     <book>
-      <name>ddd</name>
-      <author>fdf</author>
-      <price>435</price>
-      <id>34</id>
+      <name>name1</name>
+      <author>author1</author>
+      <price>1000</price>
+      <id>3</id>
     </book>
     <book>
       <name>fdgdfg</name>

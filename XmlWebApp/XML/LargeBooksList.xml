@@ -1,34 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <books>
   <bookCollection>
-    <book>
-      <name>YSX79SKH2L</name>
-      <author>NXX4FB61LY</author>
-      <price>2309</price>
-      <id>1</id>
-    </book>
-    <book>
-      <name>F7LK0I76BG</name>
-      <author>A4XBZOYZ3R</author>
-      <price>7457</price>
+    <book language="Russian">
+      <name>TBT32OQJTX</name>
+      <author>V0FU73E5SM</author>
+      <price>3180</price>
       <id>2</id>
     </book>
-    <book>
-      <name>HACI899DJP</name>
-      <author>8AATVLWIKM</author>
-      <price>3101</price>
+    <book language="English">
+      <name>QCPJWCYNSM</name>
+      <author>PAV8Z7JAQ6</author>
+      <price>9548</price>
       <id>3</id>
     </book>
-    <book>
-      <name>0EM2A3PWHC</name>
-      <author>SHR76IC1I8</author>
-      <price>7954</price>
-      <id>4</id>
-    </book>
-    <book>
-      <name>11C3WSEDBQ</name>
-      <author>SEPQ60P8GT</author>
-      <price>4843</price>
+    <book language="Russian">
+      <name>KF88DHVR5O</name>
+      <author>RB1EUOTFKZ</author>
+      <price>2468</price>
       <id>5</id>
     </book>
   </bookCollection>
